@@ -1,0 +1,22 @@
+### make sure you have rest client extention installed to use this
+GET  http://localhost:3030
+
+### Login
+POST http://localhost:3030/auth/login
+
+### Register
+POST  http://localhost:3030/auth/register
+Content-Type: application/json
+
+{
+    "email":"rvmdr1999@gmail.com",
+    "password":"123ee4"
+}
+
+### Logout
+DELETE http://localhost:3030/auth/logout
+
+### Refresh Token
+POST  http://localhost:3030/auth/refresh-token
+
+
