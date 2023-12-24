@@ -1,12 +1,15 @@
-### make sure you have rest client extention installed to use this
-GET  http://localhost:3030
+@hostname=http://localhost
+@port={{$dotenv PORT}}
+@baseurl={{hostname}}:{{port}}
+
+GET  {{baseurl}}
 
 ### Login
-POST http://localhost:3030/auth/login
+POST {{baseurl}}/auth/login
 
 ### Register
-POST  http://localhost:3030/auth/register
-Content-Type: application/json
+POST {{baseurl}}/auth/register
+Content-Type:application/json
 
 {
     "email":"rvmdr1999@gmail.com",
@@ -14,9 +17,7 @@ Content-Type: application/json
 }
 
 ### Logout
-DELETE http://localhost:3030/auth/logout
+DELETE {{baseurl}}/auth/logout
 
 ### Refresh Token
-POST  http://localhost:3030/auth/refresh-token
-
-
+POST  {{baseurl}}/auth/refresh-token
