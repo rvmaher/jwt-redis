@@ -1,23 +1,34 @@
 @hostname=http://localhost
 @port={{$dotenv PORT}}
 @baseurl={{hostname}}:{{port}}
+@auth=auth
 
+### Host
 GET  {{baseurl}}
 
-### Login
-POST {{baseurl}}/auth/login
-
 ### Register
-POST {{baseurl}}/auth/register
+POST {{baseurl}}/{{auth}}/register
 Content-Type:application/json
 
 {
-    "email":"rvmdr1999@gmail.com",
-    "password":"123ee4"
+    "email":"rvmaher1999@gmail.com",
+    "password":"123456"
 }
 
+
+### Login
+POST {{baseurl}}/{{auth}}/login
+Content-Type:application/json
+
+{
+    "email":"rvmaher1999@gmail.com",
+    "password":"123456"
+}
+
+
 ### Logout
-DELETE {{baseurl}}/auth/logout
+DELETE {{baseurl}}/{{auth}}/logout
+
 
 ### Refresh Token
-POST  {{baseurl}}/auth/refresh-token
+POST  {{baseurl}}/{{auth}}/refresh-token

@@ -1,4 +1,5 @@
 const JWT = require("jsonwebtoken");
+const createHttpError = require("http-errors");
 const { ACCESS_TOKEN_SECRET } = require("./config");
 
 const signAccessToken = (userId) => {
@@ -11,7 +12,9 @@ const signAccessToken = (userId) => {
       audience: userId,
     };
     JWT.sign(payload, secret, options, (err, token) => {
-      if (err) return reject(err);
+      if (err) {
+        return reject(createHttpError.InternalServerError());
+      }
       resolve(token);
     });
   });

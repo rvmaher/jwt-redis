@@ -18,6 +18,14 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
+UserSchema.methods.isPasswordValid = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const User = mongoose.model("user", UserSchema);
 
 module.exports = User;

@@ -1,4 +1,4 @@
-const createError = require("http-errors");
+const createHttpError = require("http-errors");
 
 const errorHandler = (err, req, res, next) => {
   if (err.isJoi) {
@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
 };
 
 const notFound = (req, res, next) => {
-  next(createError.NotFound());
+  next(createHttpError.NotFound());
 };
 
 module.exports = { errorHandler, notFound };
