@@ -2,9 +2,12 @@
 @port={{$dotenv PORT}}
 @baseurl={{hostname}}:{{port}}
 @auth=auth
+@ac_token=
+@ref_token=
 
 ### Host
 GET  {{baseurl}}
+Authorization:Bearer {{ac_token}}
 
 ### Register
 POST {{baseurl}}/{{auth}}/register
@@ -32,3 +35,8 @@ DELETE {{baseurl}}/{{auth}}/logout
 
 ### Refresh Token
 POST  {{baseurl}}/{{auth}}/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken":{{ref_token}}
+}

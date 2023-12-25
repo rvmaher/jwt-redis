@@ -1,9 +1,10 @@
-const express = require("express");
-const { errorHandler, notFound } = require("./helpers/errorHandler");
 require("dotenv").config();
-const morgan = require("morgan");
 require("./helpers/initDb");
+const express = require("express");
+const morgan = require("morgan");
 const { PORT } = require("./helpers/config");
+const { errorHandler, notFound } = require("./helpers/errorHandler");
+const { verifyAccessToken } = require("./helpers/jwtHelper");
 const authRouter = require("./routes/auth.route");
 
 const app = express();
@@ -13,7 +14,7 @@ app.use(morgan("tiny"));
 
 app.use("/auth", authRouter);
 
-app.get("/", (req, res) => {
+app.get("/", verifyAccessToken, (req, res) => {
   res.send("Hello from express");
 });
 
