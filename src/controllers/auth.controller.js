@@ -6,6 +6,7 @@ const {
   verifyRefreshToken,
 } = require("../helpers/jwtHelper");
 const createHttpError = require("http-errors");
+const { redisClient } = require("../helpers/initRedis");
 
 const register = async (req, res, next) => {
   try {
@@ -40,10 +41,6 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = (req, res) => {
-  res.send("logout");
-};
-
 const refreshToken = async (req, res, next) => {
   const { refreshToken } = req.body;
   try {
@@ -57,4 +54,16 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, logout, refreshToken };
+const logout = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return createHttpError.BadRequest();
+    const userId = await verifyRefreshToken(refreshToken);
+    await redisClient.DEL(userId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { register, login, refreshToken, logout };

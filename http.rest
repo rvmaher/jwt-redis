@@ -3,7 +3,6 @@
 @baseurl={{hostname}}:{{port}}
 @auth=auth
 @ac_token=
-@ref_token=
 
 ### Host
 GET  {{baseurl}}
@@ -14,7 +13,7 @@ POST {{baseurl}}/{{auth}}/register
 Content-Type:application/json
 
 {
-    "email":"rvmaher1999@gmail.com",
+    "email":"test@gmail.com",
     "password":"123456"
 }
 
@@ -24,13 +23,9 @@ POST {{baseurl}}/{{auth}}/login
 Content-Type:application/json
 
 {
-    "email":"rvmaher1999@gmail.com",
+    "email":"test@gmail.com",
     "password":"123456"
 }
-
-
-### Logout
-DELETE {{baseurl}}/{{auth}}/logout
 
 
 ### Refresh Token
@@ -38,5 +33,14 @@ POST  {{baseurl}}/{{auth}}/refresh-token
 Content-Type: application/json
 
 {
-    "refreshToken":{{ref_token}}
+    "refreshToken":""
+}
+
+
+### Logout
+DELETE {{baseurl}}/{{auth}}/logout
+Content-Type: application/json
+
+{
+    "refreshToken":""
 }

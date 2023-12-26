@@ -1,6 +1,9 @@
 const JWT = require("jsonwebtoken");
 const createHttpError = require("http-errors");
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("./config");
+const { redisClient } = require("../helpers/initRedis");
+
+const ONE_YEAR = 365 * 24 * 60 * 60;
 
 const signAccessToken = (userId) => {
   return new Promise((resolve, reject) => {
@@ -45,25 +48,36 @@ const signRefreshToken = (userId) => {
       issuer: "rvmaher.com",
       audience: userId,
     };
-    JWT.sign(payload, secret, options, (err, token) => {
+    JWT.sign(payload, secret, options, async (err, token) => {
       if (err) {
         return reject(createHttpError.InternalServerError());
       }
-      resolve(token);
+      try {
+        await redisClient.SETEX(userId, ONE_YEAR, token);
+        return resolve(token);
+      } catch {
+        return reject(createHttpError.InternalServerError());
+      }
     });
   });
 };
 
 const verifyRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
-    JWT.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, payload) => {
+    JWT.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, payload) => {
       if (err) {
         const message =
           err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
         return reject(createHttpError.Unauthorized(message));
       }
       const userId = payload.aud;
-      resolve(userId);
+      try {
+        const refToken = await redisClient.GET(userId);
+        if (refreshToken === refToken) return resolve(userId);
+        else return reject(createHttpError.Unauthorized());
+      } catch {
+        return reject(createHttpError.InternalServerError());
+      }
     });
   });
 };

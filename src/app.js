@@ -1,5 +1,6 @@
 require("dotenv").config();
 require("./helpers/initDb");
+require("./helpers/initRedis");
 const express = require("express");
 const morgan = require("morgan");
 const { PORT } = require("./helpers/config");
@@ -21,6 +22,6 @@ app.get("/", verifyAccessToken, (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server started on port ${PORT}`);
 });
